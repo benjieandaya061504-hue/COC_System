@@ -1,0 +1,93 @@
+.assign-staff-page {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.assign-staff-page h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.assign-client-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.assign-client-select label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.assign-client-select select {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  min-width: 280px;
+  outline: none;
+}
+
+.assign-client-select select:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.assign-client-info {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.assign-empty {
+  color: #999;
+  text-align: center;
+  padding: 2rem;
+}
+
+.assign-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.assign-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-size: 0.9rem;
+}
+
+.assign-item:hover {
+  background: #f5f7fa;
+}
+
+.assign-item--checked {
+  background: #e3f2fd;
+  border-color: #90caf9;
+}
+
+.assign-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.assign-item-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.assign-item-role {
+  color: #888;
+  font-size: 0.85rem;
+}

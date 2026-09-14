@@ -1,0 +1,145 @@
+.categories-page {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.categories-page h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.cat-add-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.cat-add-form input[type="text"] {
+  flex: 1;
+  max-width: 280px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.cat-add-form input[type="text"]:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.cat-add-form input[type="color"] {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.cat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cat-table th,
+.cat-table td {
+  text-align: left;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.cat-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 600;
+}
+
+.cat-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.cat-color-swatch {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.cat-edit-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.cat-edit-inline input[type="text"] {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  width: 160px;
+}
+
+.cat-edit-inline input[type="color"] {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1px;
+}
+
+.cat-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Shared button styles */
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary {
+  background: var(--coc-gold);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #b08a1f;
+}
+
+.btn-secondary {
+  background: #f0f2f5;
+  color: #555;
+}
+
+.btn-secondary:hover {
+  background: #e0e2e5;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #d32f2f;
+}
+
+.btn-sm {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+}
