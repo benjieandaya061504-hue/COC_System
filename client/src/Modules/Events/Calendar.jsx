@@ -5,7 +5,7 @@ import './Calendar.css'
 
 // TODO: wire to API — replace useState(sampleEvents) with useEffect fetch
 //   useEffect(() => {
-//     axiosClient.get('/api/events?month=' + year + '-' + month).then(...)
+//     axiosClient.get('/events?month=' + year + '-' + month).then(...)
 //   }, [year, month])
 
 export default function Calendar() {
@@ -29,7 +29,24 @@ export default function Calendar() {
   const [checkedStaff, setCheckedStaff] = useState(new Set())    // set of staff IDs
   const [origAssigned, setOrigAssigned] = useState(new Map())    // staffId -> assignmentId
 
-  const [staffErrors, setStaffErrors] = useState([])
+  // Form validation error state (inline, not alert)
+  const [formErrors, setFormErrors] = useState({})     // fieldKey -> message
+  const [generalFormError, setGeneralFormError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Helper: update a field + clear its inline error
+  const setField = (setter, fieldKey) => (value) => {
+    setter(value)
+    setFormErrors((prev) => { const copy = { ...prev }; delete copy[fieldKey]; return copy })
+  }
+
+  const setAddClientNameWithClear = setField(setAddClientName, 'addClientName')
+  const setAddCategoryIdWithClear = setField(setAddCategoryId, 'addCategoryId')
+  const setAddProgramTimeWithClear = setField(setAddProgramTime, 'addProgramTime')
+  const setAddTotalAmountWithClear = setField(setAddTotalAmount, 'addTotalAmount')
+  const setAddContactNumberWithClear = setField(setAddContactNumber, 'addContactNumber')
+  const setAddVenueWithClear = setField(setAddVenue, 'addVenue')
+  const setModalAddDateWithClear = setField(setModalAddDate, 'modalAddDate')
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth() // 0-based
@@ -142,7 +159,9 @@ export default function Calendar() {
     setModalDate(dateStr)
     setModalAddDate(dateStr || '')
     setEditingEvent(null)
-    setStaffErrors([])
+    setFormErrors({})
+    setGeneralFormError('')
+    setIsSubmitting(false)
     setCheckedStaff(new Set())
     setOrigAssigned(new Map())
     // Reset form fields
@@ -157,7 +176,9 @@ export default function Calendar() {
   const closeModal = () => {
     setModalDate(null)
     setEditingEvent(null)
-    setStaffErrors([])
+    setFormErrors({})
+    setGeneralFormError('')
+    setIsSubmitting(false)
   }
 
   const openStandaloneAdd = () => {
@@ -166,6 +187,9 @@ export default function Calendar() {
 
   const startEdit = (ev) => {
     setEditingEvent(ev)
+    setFormErrors({})
+    setGeneralFormError('')
+    setIsSubmitting(false)
     setAddClientName(ev.title || '')
     setAddCategoryId(ev.categoryId)
     setAddProgramTime(ev.startTime || '09:00')
@@ -192,10 +216,27 @@ export default function Calendar() {
   // -- Save (create or update) --
   const handleAddEvent = async (e) => {
     e.preventDefault()
-    if (!addClientName.trim() || !addTotalAmount) return
+    setFormErrors({})
+    setGeneralFormError('')
+    setIsSubmitting(true)
+
+    if (!addClientName.trim() || !addTotalAmount) {
+      if (!addClientName.trim()) {
+        setFormErrors((prev) => ({ ...prev, addClientName: 'Client name is required.' }))
+      }
+      if (!addTotalAmount) {
+        setFormErrors((prev) => ({ ...prev, addTotalAmount: 'Total amount is required.' }))
+      }
+      setIsSubmitting(false)
+      return
+    }
 
     const date = modalDate || modalAddDate
-    if (!date) return alert('Please select a date.')
+    if (!date) {
+      setFormErrors((prev) => ({ ...prev, modalAddDate: 'Please select a date.' }))
+      setIsSubmitting(false)
+      return
+    }
 
     const payload = {
       client_name: addClientName.trim(),
@@ -264,8 +305,34 @@ export default function Calendar() {
         closeModal()
       }
     } catch (err) {
-      const msg = err.response?.data?.error || 'Failed to save booking'
-      alert(msg)
+      const message = err.response?.data?.error || 'Failed to save booking.'
+
+      // Try to map known validation messages to fields
+      if (typeof message === 'string') {
+        const lower = message.toLowerCase()
+        if (lower.includes('client_name')) {
+          setFormErrors((prev) => ({ ...prev, addClientName: message }))
+        } else if (lower.includes('total_amount')) {
+          setFormErrors((prev) => ({ ...prev, addTotalAmount: message }))
+        } else if (lower.includes('category') || lower.includes('category_id')) {
+          setFormErrors((prev) => ({ ...prev, addCategoryId: message }))
+        } else if (lower.includes('contact_number')) {
+          setFormErrors((prev) => ({ ...prev, addContactNumber: message }))
+        } else if (lower.includes('venue')) {
+          setFormErrors((prev) => ({ ...prev, addVenue: message }))
+        } else if (lower.includes('program_time')) {
+          setFormErrors((prev) => ({ ...prev, addProgramTime: message }))
+        } else if (lower.includes('event_date') || lower.includes('date')) {
+          setFormErrors((prev) => ({ ...prev, modalAddDate: message }))
+        } else {
+          // Unrecognised — show as general error at the top
+          setGeneralFormError(message)
+        }
+      } else {
+        setGeneralFormError(message)
+      }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 // -- Escape key closes modal --
@@ -383,47 +450,67 @@ export default function Calendar() {
 
             {/* Add / Edit form */}
             <form className="cal-modal-form" onSubmit={handleAddEvent}>
+              {generalFormError && (
+                <div className="cal-form-general-error">{generalFormError}</div>
+              )}
+
               {(!modalDate || editingEvent) && (
                 <div className="cal-field-row">
                   <label>Date *</label>
                   <input
                     type="date"
                     value={modalAddDate}
-                    onChange={(e) => setModalAddDate(e.target.value)}
+                    onChange={(e) => setModalAddDateWithClear(e.target.value)}
+                    className={formErrors.modalAddDate ? 'field-error-border' : ''}
                     required
                   />
                 </div>
+              )}
+              {formErrors.modalAddDate && (
+                <p className="field-error cal-field-error">{formErrors.modalAddDate}</p>
               )}
               <div className="cal-field-row">
                 <label>Client *</label>
                 <input
                   type="text"
                   value={addClientName}
-                  onChange={(e) => setAddClientName(e.target.value)}
+                  onChange={(e) => setAddClientNameWithClear(e.target.value)}
                   placeholder="Client / Event name"
+                  className={formErrors.addClientName ? 'field-error-border' : ''}
                   required
                   autoFocus={!editingEvent}
                 />
               </div>
+              {formErrors.addClientName && (
+                <p className="field-error cal-field-error">{formErrors.addClientName}</p>
+              )}
               <div className="cal-field-row">
                 <label>Category</label>
                 <select
                   value={addCategoryId}
-                  onChange={(e) => setAddCategoryId(parseInt(e.target.value, 10))}
+                  onChange={(e) => setAddCategoryIdWithClear(parseInt(e.target.value, 10))}
+                  className={formErrors.addCategoryId ? 'field-error-border' : ''}
                 >
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
               </div>
+              {formErrors.addCategoryId && (
+                <p className="field-error cal-field-error">{formErrors.addCategoryId}</p>
+              )}
               <div className="cal-field-row">
                 <label>Time</label>
                 <input
                   type="time"
                   value={addProgramTime}
-                  onChange={(e) => setAddProgramTime(e.target.value)}
+                  onChange={(e) => setAddProgramTimeWithClear(e.target.value)}
+                  className={formErrors.addProgramTime ? 'field-error-border' : ''}
                 />
               </div>
+              {formErrors.addProgramTime && (
+                <p className="field-error cal-field-error">{formErrors.addProgramTime}</p>
+              )}
               <div className="cal-field-row">
                 <label>Amount *</label>
                 <input
@@ -431,29 +518,41 @@ export default function Calendar() {
                   min="0"
                   step="0.01"
                   value={addTotalAmount}
-                  onChange={(e) => setAddTotalAmount(e.target.value)}
+                  onChange={(e) => setAddTotalAmountWithClear(e.target.value)}
                   placeholder="Total amount"
+                  className={formErrors.addTotalAmount ? 'field-error-border' : ''}
                   required
                 />
               </div>
+              {formErrors.addTotalAmount && (
+                <p className="field-error cal-field-error">{formErrors.addTotalAmount}</p>
+              )}
               <div className="cal-field-row">
                 <label>Contact</label>
                 <input
                   type="text"
                   value={addContactNumber}
-                  onChange={(e) => setAddContactNumber(e.target.value)}
+                  onChange={(e) => setAddContactNumberWithClear(e.target.value)}
                   placeholder="Contact number"
+                  className={formErrors.addContactNumber ? 'field-error-border' : ''}
                 />
               </div>
+              {formErrors.addContactNumber && (
+                <p className="field-error cal-field-error">{formErrors.addContactNumber}</p>
+              )}
               <div className="cal-field-row">
                 <label>Venue</label>
                 <input
                   type="text"
                   value={addVenue}
-                  onChange={(e) => setAddVenue(e.target.value)}
+                  onChange={(e) => setAddVenueWithClear(e.target.value)}
                   placeholder="Venue"
+                  className={formErrors.addVenue ? 'field-error-border' : ''}
                 />
               </div>
+              {formErrors.addVenue && (
+                <p className="field-error cal-field-error">{formErrors.addVenue}</p>
+              )}
 
               {/* Staff assignment checklist */}
               {staffList.length > 0 && (
@@ -474,8 +573,8 @@ export default function Calendar() {
               )}
 
               <div className="cal-btn-row">
-                <button type="submit" className="btn btn-primary">
-                  {editingEvent ? 'Update Booking' : 'Save Event'}
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Saving…' : editingEvent ? 'Update Booking' : 'Save Event'}
                 </button>
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>Cancel</button>
               </div>

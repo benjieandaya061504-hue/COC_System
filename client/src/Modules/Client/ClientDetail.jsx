@@ -1,38 +1,79 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { sampleClients } from './mockData.js'
-import { usePayments } from '../Payments/PaymentsContext.jsx'
-import { useStaff } from '../Staff/StaffContext.jsx'
-import { defaultCategories } from '../Events/mockData.js'
+import axiosClient from '../../api/axiosClient.js'
 import './ClientDetail.css'
-
-// Pure function: balance = total_amount - sum of payments for this client
-// Kept separate so swapping data sources later is just a different import,
-// not a change to the math.
-function computeBalance(client, payments) {
-  const totalPaid = payments
-    .filter((p) => p.clientId === client.id)
-    .reduce((sum, p) => sum + Number(p.amount), 0)
-  return Number(client.total_amount) - totalPaid
-}
-
-// TODO: wire to API — replace useState(sampleClients) with useEffect fetch
-//   useEffect(() => {
-//     axiosClient.get('/api/clients/' + id).then(...)
-//     axiosClient.get('/api/payments?clientId=' + id).then(...)
-//   }, [id])
 
 export default function ClientDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const clientId = Number(id)
 
-  const [clients, setClients] = useState(sampleClients)
-  const { payments } = usePayments()
-  const { getStaffForClient } = useStaff()
-  const [categories] = useState(defaultCategories)
+  const [client, setClient] = useState(null)
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  const client = clients.find((c) => c.id === clientId)
+  useEffect(() => {
+    let cancelled = false
+
+    Promise.all([
+      axiosClient.get(`/clients/${clientId}`),
+      axiosClient.get('/events/categories'),
+    ])
+      .then(([clientRes, catsRes]) => {
+        if (cancelled) return
+        setClient(clientRes.data)
+        setCategories(catsRes.data)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        if (err.response?.status === 404) {
+          setError('Client not found.')
+        } else {
+          setError(err.response?.data?.error || 'Failed to load client.')
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => { cancelled = true }
+  }, [id])
+
+  const handleDelete = async () => {
+    if (!client) return
+    if (!confirm(`Delete client "${client.client_name}"? This cannot be undone.`)) return
+
+    setIsDeleting(true)
+    try {
+      await axiosClient.delete(`/clients/${clientId}`)
+      navigate('/clients', { replace: true })
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Failed to delete client.'
+      setError(msg)
+      setIsDeleting(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="detail-page">
+        <p className="detail-not-found">Loading client data…</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="detail-page">
+        <p className="detail-not-found">{error}</p>
+        <button className="btn btn-secondary" onClick={() => navigate('/clients')}>
+          Back to Clients
+        </button>
+      </div>
+    )
+  }
 
   if (!client) {
     return (
@@ -45,18 +86,17 @@ export default function ClientDetail() {
     )
   }
 
-  const cat = categories.find((c) => c.id === client.categoryId)
-  const clientPayments = payments.filter((p) => p.clientId === clientId)
-  const balance = computeBalance(client, payments)
+  const cat = categories.find(
+    (c) => c.id === (client.category_id ?? client.categoryId)
+  )
 
-  const handleDelete = () => {
-    // TODO: wire to API DELETE /api/clients/:id
-    if (confirm(`Delete client "${client.client_name}"? This cannot be undone.`)) {
-      setClients((prev) => prev.filter((c) => c.id !== clientId))
-      navigate('/clients', { replace: true })
-    }
-  }
-return (
+  const clientPayments = client.payments || []
+  const totalPaid = clientPayments.reduce((s, p) => s + Number(p.amount), 0)
+  const balance = Number(client.balance ?? client.total_amount - totalPaid)
+
+  const assignedStaff = client.staff || []
+
+  return (
     <div className="detail-page">
       <div className="detail-header">
         <h2>{client.client_name}</h2>
@@ -64,8 +104,8 @@ return (
           <button className="btn btn-secondary" onClick={() => navigate(`/clients/${clientId}/edit`)}>
             Edit
           </button>
-          <button className="btn btn-danger" onClick={handleDelete}>
-            Delete
+          <button className="btn btn-danger" onClick={handleDelete} disabled={isDeleting}>
+            {isDeleting ? 'Deleting…' : 'Delete'}
           </button>
         </div>
       </div>
@@ -82,7 +122,11 @@ return (
               <tr><td className="detail-label">Deadline</td><td>{client.deadline}</td></tr>
               <tr>
                 <td className="detail-label">Category</td>
-                <td>{cat && <span className="cat-chip" style={{ background: cat.color }}>{cat.name}</span>}</td>
+                <td>{cat ? (
+                  <span className="cat-chip" style={{ background: cat.color }}>{cat.name}</span>
+                ) : client.category_name ? (
+                  <span className="cat-chip" style={{ background: '#888' }}>{client.category_name}</span>
+                ) : '-'}</td>
               </tr>
               <tr>
                 <td className="detail-label">Status</td>
@@ -100,7 +144,7 @@ return (
               <tr>
                 <td className="detail-label">Total Paid</td>
                 <td className="detail-amount">
-                  ₱{clientPayments.reduce((s, p) => s + Number(p.amount), 0).toLocaleString()}
+                  ₱{totalPaid.toLocaleString()}
                 </td>
               </tr>
               <tr className="detail-balance-row">
@@ -116,22 +160,19 @@ return (
 
       <div className="detail-section">
         <h3>Assigned Staff</h3>
-        {(() => {
-          const assigned = getStaffForClient(clientId)
-          return assigned.length === 0 ? (
-            <p className="detail-placeholder">No staff assigned yet.</p>
-          ) : (
-            <ul className="detail-staff-list">
-              {assigned.map((s) => (
-                <li key={s.id} className="detail-staff-item">
-                  <span className="detail-staff-name">{s.name}</span>
-                  <span className="detail-staff-role">{s.role}</span>
-                  <span className="detail-staff-contact">{s.contact_number}</span>
-                </li>
-              ))}
-            </ul>
-          )
-        })()}
+        {assignedStaff.length === 0 ? (
+          <p className="detail-placeholder">No staff assigned yet.</p>
+        ) : (
+          <ul className="detail-staff-list">
+            {assignedStaff.map((s) => (
+              <li key={s.id} className="detail-staff-item">
+                <span className="detail-staff-name">{s.name}</span>
+                <span className="detail-staff-role">{s.role || s.position}</span>
+                <span className="detail-staff-contact">{s.contact_number}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="detail-section">
@@ -162,5 +203,3 @@ return (
     </div>
   )
 }
-
-export { computeBalance }

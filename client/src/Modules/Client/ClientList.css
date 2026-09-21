@@ -46,6 +46,12 @@
   padding: 2rem !important;
 }
 
+.client-error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
 .client-name-link {
   font-weight: 600;
   color: #1a73e8;
@@ -53,6 +59,11 @@
 
 .client-name-link:hover {
   text-decoration: underline;
+}
+
+.client-table .detail-amount {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
 }
 
 .actions-cell {

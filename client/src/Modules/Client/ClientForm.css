@@ -20,6 +20,31 @@
   font-weight: 500;
 }
 
+.form-general-error {
+  background: #fce4ec;
+  color: #c62828;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.field-error {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+.field-error-border {
+  border-color: #d32f2f !important;
+}
+
+.field-error-border:focus {
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15) !important;
+}
+
 .client-form .form-row {
   display: flex;
   gap: 1rem;
@@ -69,4 +94,10 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+.client-empty {
+  text-align: center;
+  color: #999;
+  padding: 2rem !important;
 }

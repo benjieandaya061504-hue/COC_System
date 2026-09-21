@@ -1,18 +1,58 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { sampleClients } from './mockData.js'
-import { defaultCategories } from '../Events/mockData.js'
+import axiosClient from '../../api/axiosClient.js'
 import './ClientList.css'
 
-// TODO: wire to API — replace useState(sampleClients) with useEffect fetch
-//   useEffect(() => { axiosClient.get('/api/clients').then(...) }, [])
-
 export default function ClientList() {
-  const [clients] = useState(sampleClients)
-  const [categories] = useState(defaultCategories)
+  const [clients, setClients] = useState([])
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+
+    Promise.all([
+      axiosClient.get('/clients'),
+      axiosClient.get('/events/categories'),
+    ])
+      .then(([clientsRes, catsRes]) => {
+        if (cancelled) return
+        setClients(clientsRes.data)
+        setCategories(catsRes.data)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        setError(err.response?.data?.error || 'Failed to load clients.')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+
+    return () => { cancelled = true }
+  }, [])
 
   const catMap = {}
   categories.forEach((c) => { catMap[c.id] = c })
+
+  if (loading) {
+    return (
+      <div className="client-list-page">
+        <p className="client-empty">Loading clients…</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="client-list-page">
+        <p className="client-error">{error}</p>
+        <button className="btn btn-secondary" onClick={() => window.location.reload()}>
+          Retry
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="client-list-page">
@@ -28,6 +68,7 @@ export default function ClientList() {
             <th>Event Date</th>
             <th>Venue</th>
             <th>Category</th>
+            <th>Balance</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -35,11 +76,11 @@ export default function ClientList() {
         <tbody>
           {clients.length === 0 ? (
             <tr>
-              <td colSpan={6} className="client-empty">No clients yet.</td>
+              <td colSpan={7} className="client-empty">No clients yet.</td>
             </tr>
           ) : (
             clients.map((c) => {
-              const cat = catMap[c.categoryId]
+              const cat = catMap[c.category_id] || catMap[c.categoryId]
               return (
                 <tr key={c.id}>
                   <td>
@@ -52,9 +93,17 @@ export default function ClientList() {
                   <td>
                     {cat && (
                       <span className="cat-chip" style={{ background: cat.color }}>
-                        {cat.name}
+                        {c.category_name || cat.name}
                       </span>
                     )}
+                    {!cat && c.category_name && (
+                      <span className="cat-chip" style={{ background: '#888' }}>
+                        {c.category_name}
+                      </span>
+                    )}
+                  </td>
+                  <td className="detail-amount">
+                    ₱{Number(c.balance ?? 0).toLocaleString()}
                   </td>
                   <td>
                     <span className={`status-badge status--${c.status}`}>

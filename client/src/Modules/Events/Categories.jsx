@@ -4,7 +4,7 @@ import './Categories.css'
 
 // TODO: wire to API — replace useState(defaultCategories) with useEffect fetch
 //   useEffect(() => {
-//     axiosClient.get('/api/categories').then(...)
+//     axiosClient.get('/categories').then(...)
 //   }, [])
 
 export default function Categories() {
