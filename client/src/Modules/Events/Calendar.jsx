@@ -33,6 +33,7 @@ export default function Calendar() {
   const [formErrors, setFormErrors] = useState({})     // fieldKey -> message
   const [generalFormError, setGeneralFormError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [refreshError, setRefreshError] = useState('')
 
   // Helper: update a field + clear its inline error
   const setField = (setter, fieldKey) => (value) => {
@@ -104,12 +105,21 @@ export default function Calendar() {
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1))
 
   // -- Fetch events for the displayed month from the API --
-  useEffect(() => {
+  const fetchMonthEvents = async () => {
     const start = ymd(year, month, 1)
     const end = ymd(year, month, daysInMonth)
-    axiosClient.get(`/events?start=${start}&end=${end}`)
-      .then((res) => setEvents(res.data))
-      .catch((err) => console.error('Failed to fetch events:', err))
+    try {
+      const res = await axiosClient.get(`/events?start=${start}&end=${end}`)
+      setEvents(res.data)
+      setRefreshError('')
+    } catch (err) {
+      console.error('Failed to fetch events:', err)
+      setRefreshError('Failed to refresh calendar - please reload the page.')
+    }
+  }
+
+  useEffect(() => {
+    fetchMonthEvents()
   }, [year, month])
 
   // -- Fetch staff list once on mount --
@@ -254,6 +264,7 @@ export default function Calendar() {
         const updateRes = await axiosClient.put(`/clients/${editingEvent.id}`, payload)
         const updatedId = updateRes.data.id
 
+        try {
         // Diff staff assignments
         const newlyChecked = []
         const toUnassign = []
@@ -284,12 +295,16 @@ export default function Calendar() {
         if (failedStaff.length > 0) {
           alert(`Booking updated, but failed to assign staff: ${failedStaff.join(', ')}`)
         }
+        } finally {
+          await fetchMonthEvents()
+        }
         closeModal()
       } else {
         // --- CREATE new booking ---
         const createRes = await axiosClient.post('/clients', payload)
         const newId = createRes.data.id
 
+        try {
         const failedStaff = []
         for (const staffId of checkedStaff) {
           try {
@@ -301,6 +316,9 @@ export default function Calendar() {
         }
         if (failedStaff.length > 0) {
           alert(`Booking saved, but failed to assign: ${failedStaff.join(', ')}`)
+        }
+        } finally {
+          await fetchMonthEvents()
         }
         closeModal()
       }
@@ -366,6 +384,10 @@ export default function Calendar() {
           + Add Booking
         </button>
       </div>
+      {refreshError && <div className='cal-refresh-error' style={{padding:'8px',background:'#ffe0e0',borderRadius:'4px',marginBottom:'8px'}}><span>{refreshError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setRefreshError('')}>{'\u00D7'}</span></div>}
+
+
+
 
       <div className="calendar-grid">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
