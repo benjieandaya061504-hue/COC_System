@@ -101,6 +101,23 @@
   gap: 0.4rem;
 }
 
+/* Shared search input — used by ClientList.jsx, PaymentHistory.jsx, etc. */
+.client-search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+.client-search-input:focus {
+  border-color: var(--coc-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+}
 /* Shared button styles */
 .btn {
   border: none;

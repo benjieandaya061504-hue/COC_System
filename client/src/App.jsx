@@ -16,45 +16,39 @@ import PaymentHistory from './Modules/Payments/PaymentHistory.jsx'
 import StaffList from './Modules/Staff/StaffList.jsx'
 import StaffForm from './Modules/Staff/StaffForm.jsx'
 import AssignStaff from './Modules/Staff/AssignStaff.jsx'
-import { StaffProvider } from './Modules/Staff/StaffContext.jsx'
 
 import './App.css'
-import { PaymentsProvider } from './Modules/Payments/PaymentsContext.jsx'
 
 function App() {
   return (
     <AuthProvider>
-      <PaymentsProvider>
-        <StaffProvider>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/*"
-              element={
-                <ProtectedRoute>
-                  <Navbar />
-                  <main className="main-content">
-                    <Routes>
-                      <Route path="/" element={<Navigate to="/calendar" replace />} />
-                      <Route path="/calendar" element={<Calendar />} />
-                      <Route path="/categories" element={<Categories />} />
-                      <Route path="/clients" element={<ClientList />} />
-                      <Route path="/clients/new" element={<ClientForm />} />
-                      <Route path="/clients/:id" element={<ClientDetail />} />
-                      <Route path="/clients/:id/edit" element={<ClientForm />} />
-                      <Route path="/payments/add" element={<AddPayment />} />
-                      <Route path="/payments/history" element={<PaymentHistory />} />
-                      <Route path="/staff" element={<StaffList />} />
-                      <Route path="/staff/new" element={<StaffForm />} />
-                      <Route path="/staff/assign" element={<AssignStaff />} />
-                    </Routes>
-                  </main>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </StaffProvider>
-      </PaymentsProvider>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <Navbar />
+              <main className="main-content">
+                <Routes>
+                  <Route path="/" element={<Navigate to="/calendar" replace />} />
+                  <Route path="/calendar" element={<Calendar />} />
+                  <Route path="/categories" element={<Categories />} />
+                  <Route path="/clients" element={<ClientList />} />
+                  <Route path="/clients/new" element={<ClientForm />} />
+                  <Route path="/clients/:id" element={<ClientDetail />} />
+                  <Route path="/clients/:id/edit" element={<ClientForm />} />
+                  <Route path="/payments/add" element={<AddPayment />} />
+                  <Route path="/payments/history" element={<PaymentHistory />} />
+                  <Route path="/staff" element={<StaffList />} />
+                  <Route path="/staff/new" element={<StaffForm />} />
+                  <Route path="/staff/assign" element={<AssignStaff />} />
+                </Routes>
+              </main>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </AuthProvider>
   )
 }

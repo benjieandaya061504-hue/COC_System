@@ -8,6 +8,7 @@ export default function ClientList() {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     let cancelled = false
@@ -35,6 +36,17 @@ export default function ClientList() {
   const catMap = {}
   categories.forEach((c) => { catMap[c.id] = c })
 
+  const filteredClients = searchTerm.trim() === ''
+    ? clients
+    : clients.filter((c) => {
+        const q = searchTerm.toLowerCase()
+        return (
+          (c.client_name && c.client_name.toLowerCase().includes(q)) ||
+          (c.venue && c.venue.toLowerCase().includes(q)) ||
+          (c.contact_number && c.contact_number.toLowerCase().includes(q))
+        )
+      })
+
   if (loading) {
     return (
       <div className="client-list-page">
@@ -61,6 +73,14 @@ export default function ClientList() {
         <Link to="/clients/new" className="btn btn-primary">+ Add Client</Link>
       </div>
 
+      <input
+        className="client-search-input"
+        type="text"
+        placeholder="Search by name, venue, or contact number..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
       <table className="client-table">
         <thead>
           <tr>
@@ -74,12 +94,14 @@ export default function ClientList() {
           </tr>
         </thead>
         <tbody>
-          {clients.length === 0 ? (
+          {filteredClients.length === 0 ? (
             <tr>
-              <td colSpan={7} className="client-empty">No clients yet.</td>
+              <td colSpan={7} className="client-empty">
+                {searchTerm.trim() ? 'No clients match your search.' : 'No clients yet.'}
+              </td>
             </tr>
           ) : (
-            clients.map((c) => {
+            filteredClients.map((c) => {
               const cat = catMap[c.category_id] || catMap[c.categoryId]
               return (
                 <tr key={c.id}>

@@ -57,6 +57,16 @@
   font-size: 0.9rem;
   font-weight: 500;
 }
+.form-general-error {
+  background: #fce4e4;
+  color: #c62828;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #ef9a9a;
+}
 
 .form-actions {
   display: flex;

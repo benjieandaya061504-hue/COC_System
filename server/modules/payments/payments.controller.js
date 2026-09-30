@@ -178,4 +178,36 @@ async function listPayments(req, res, next) {
   }
 }
 
-module.exports = { createPayment, listPayments };
+// ------------------------------------------------------------
+// GET /api/payments
+// List all payments across all active clients, joined with
+// client_name so no second lookup is needed.
+// Ordered by date_received DESC, id DESC.
+// ------------------------------------------------------------
+async function listAllPayments(req, res, next) {
+  try {
+    const [rows] = await pool.execute(`
+      SELECT p.id, p.event_id, p.amount, p.date_received, p.created_at,
+             ce.client_name
+        FROM payments p
+        JOIN clients_events ce ON ce.id = p.event_id
+       WHERE ce.is_active = TRUE
+       ORDER BY p.date_received DESC, p.id DESC
+    `);
+
+    res.json(
+      rows.map((p) => ({
+        id: p.id,
+        event_id: p.event_id,
+        amount: Number(p.amount),
+        date_received: p.date_received,
+        created_at: p.created_at,
+        client_name: p.client_name,
+      }))
+    );
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { createPayment, listPayments, listAllPayments };

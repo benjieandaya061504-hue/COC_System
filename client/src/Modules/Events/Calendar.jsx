@@ -12,6 +12,7 @@ export default function Calendar() {
   const [events, setEvents] = useState([])
   const [categories, setCategories] = useState(defaultCategories)
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalDate, setModalDate] = useState(null)     // null = standalone add
   const [modalAddDate, setModalAddDate] = useState('') // date input in modal
   const [editingEvent, setEditingEvent] = useState(null)
@@ -166,6 +167,7 @@ export default function Calendar() {
 
   // -- Modal open/close handlers --
   const openModal = (dateStr) => {
+    setIsModalOpen(true)
     setModalDate(dateStr)
     setModalAddDate(dateStr || '')
     setEditingEvent(null)
@@ -184,6 +186,7 @@ export default function Calendar() {
   }
 
   const closeModal = () => {
+    setIsModalOpen(false)
     setModalDate(null)
     setEditingEvent(null)
     setFormErrors({})
@@ -355,11 +358,11 @@ export default function Calendar() {
   }
 // -- Escape key closes modal --
   useEffect(() => {
-    if (modalDate === null) return
+    if (!isModalOpen) return
     const handler = (e) => { if (e.key === 'Escape') closeModal() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [modalDate])
+  }, [isModalOpen])
 
   const dateEvents = modalDate ? eventsByDate[modalDate] || [] : []
 
@@ -423,7 +426,7 @@ export default function Calendar() {
       </div>
 
       {/* Modal */}
-      {modalDate !== null && (
+      {isModalOpen && (
         <div className="cal-modal-overlay" onClick={closeModal}>
           <div className="cal-modal" onClick={(e) => e.stopPropagation()}>
             <button className="cal-modal-close" onClick={closeModal}>&times;</button>

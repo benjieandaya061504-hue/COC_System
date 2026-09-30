@@ -5,9 +5,10 @@
 
 const { Router } = require('express');
 const router = Router();
-const { createPayment, listPayments } = require('./payments.controller');
+const { createPayment, listPayments, listAllPayments } = require('./payments.controller');
 
 router.post('/', createPayment);
+router.get('/', listAllPayments);           // must be before /:eventId to avoid conflict
 router.get('/:eventId', listPayments);
 
 module.exports = router;
