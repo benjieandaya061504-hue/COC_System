@@ -1,12 +1,12 @@
 .assign-staff-page {
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
 
 .assign-staff-page h2 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
@@ -20,12 +20,12 @@
 .assign-client-select label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .assign-client-select select {
   padding: 0.45rem 0.7rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.9rem;
   min-width: 280px;
@@ -33,18 +33,18 @@
 }
 
 .assign-client-select select:focus {
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 .assign-client-info {
-  color: #888;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
 .assign-empty {
-  color: #999;
+  color: var(--color-text-muted);
   text-align: center;
   padding: 2rem;
 }
@@ -60,7 +60,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.55rem 0.75rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
@@ -68,12 +68,12 @@
 }
 
 .assign-item:hover {
-  background: #f5f7fa;
+  background: var(--color-surface);
 }
 
 .assign-item--checked {
-  background: #e3f2fd;
-  border-color: #90caf9;
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  border-color: var(--color-accent);
 }
 
 .assign-item input[type="checkbox"] {
@@ -88,6 +88,6 @@
 }
 
 .assign-item-role {
-  color: #888;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }

@@ -40,6 +40,7 @@ function mapClientRow(r) {
     status: r.status,
     balance: Number(r.balance ?? 0),
     is_active: Boolean(r.is_active),
+    completed_at: r.completed_at,
     created_at: r.created_at,
     updated_at: r.updated_at,
   };
@@ -300,10 +301,68 @@ async function softDeleteClient(req, res, next) {
   }
 }
 
+// ------------------------------------------------------------
+// PATCH /api/clients/:id/complete
+// Mark an event as done by setting completed_at = NOW().
+// ------------------------------------------------------------
+async function completeEvent(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) throw httpError(400, 'Invalid client id');
+
+    const [existing] = await pool.execute(
+      'SELECT id FROM clients_events WHERE id = ? AND is_active = TRUE',
+      [id]
+    );
+    if (existing.length === 0) throw httpError(404, 'Client not found');
+
+    await pool.execute(
+      'UPDATE clients_events SET completed_at = NOW() WHERE id = ?',
+      [id]
+    );
+
+    const client = await fetchClientWithDetails(id, { includeDetails: false });
+    res.json(client);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ------------------------------------------------------------
+// PATCH /api/clients/:id/uncomplete
+// Unmark an event by resetting completed_at to NULL.
+// ------------------------------------------------------------
+async function uncompleteEvent(req, res, next) {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) throw httpError(400, 'Invalid client id');
+
+    const [existing] = await pool.execute(
+      'SELECT id FROM clients_events WHERE id = ? AND is_active = TRUE',
+      [id]
+    );
+    if (existing.length === 0) throw httpError(404, 'Client not found');
+
+    await pool.execute(
+      'UPDATE clients_events SET completed_at = NULL WHERE id = ?',
+      [id]
+    );
+
+    const client = await fetchClientWithDetails(
+      id, { includeDetails: false }
+    );
+    res.json(client);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   listClients,
   getClient,
   createClient,
   updateClient,
   softDeleteClient,
+completeEvent,
+  uncompleteEvent,
 };

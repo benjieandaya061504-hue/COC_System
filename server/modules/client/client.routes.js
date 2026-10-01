@@ -11,6 +11,8 @@ const {
   createClient,
   updateClient,
   softDeleteClient,
+  completeEvent,
+  uncompleteEvent,
 } = require('./client.controller');
 
 router.get('/', listClients);
@@ -18,5 +20,7 @@ router.get('/:id', getClient);
 router.post('/', createClient);
 router.put('/:id', updateClient);
 router.delete('/:id', softDeleteClient);
+router.patch('/:id/complete', completeEvent);
+router.patch('/:id/uncomplete', uncompleteEvent);
 
 module.exports = router;

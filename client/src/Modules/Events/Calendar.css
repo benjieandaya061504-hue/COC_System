@@ -1,5 +1,5 @@
 .calendar-page {
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
@@ -23,10 +23,10 @@
 
 .cal-dropdown {
   padding: 0.25rem 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.85rem;
-  background: #fff;
+  background: var(--color-bg-elevated);
   cursor: pointer;
   transition: border-color 0.15s;
 }
@@ -40,18 +40,18 @@
 }
 
 .cal-dropdown:hover {
-  border-color: #1a73e8;
+  border-color: var(--color-accent);
 }
 
 .cal-dropdown:focus {
   outline: none;
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .cal-nav {
-  background: #f0f2f5;
-  border: 1px solid #ddd;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 1.2rem;
   padding: 0.3rem 0.7rem;
@@ -60,7 +60,7 @@
 }
 
 .cal-nav:hover {
-  background: #e0e2e5;
+  background: var(--color-bg-elevated);
 }
 
 .calendar-grid {
@@ -73,14 +73,14 @@
   text-align: center;
   font-weight: 600;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-text-muted);
   padding: 0.5rem 0;
   text-transform: uppercase;
 }
 
 .cal-day {
   min-height: 80px;
-  background: #fafafa;
+  background: var(--color-surface);
   border-radius: 4px;
   padding: 4px 6px;
   cursor: pointer;
@@ -90,34 +90,34 @@
 }
 
 .cal-day:hover {
-  background: #f0f4ff;
+  background: color-mix(in srgb, var(--color-accent) 8%, var(--color-surface));
 }
 
 .cal-day-other {
-  background: #f5f5f5;
+  background: var(--color-bg-elevated);
   opacity: 0.5;
 }
 
 .cal-day-today {
-  background: #e8f0fe;
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
 }
 
 .cal-day-selected {
-  outline: 2px solid var(--coc-gold);
+  outline: 2px solid var(--color-accent);
   outline-offset: -2px;
 }
 
 .cal-day-num {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-text-muted);
   display: block;
   margin-bottom: 2px;
 }
 
 .cal-event-chip {
   font-size: 0.7rem;
-  color: #fff;
+  color: var(--color-text);
   border-radius: 3px;
   padding: 1px 4px;
   margin-bottom: 2px;
@@ -127,9 +127,14 @@
   cursor: pointer;
 }
 
+.cal-event-chip--completed {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
 .cal-event-more {
   font-size: 0.7rem;
-  color: #888;
+  color: var(--color-text-muted);
 }
 
 /* Modal overlay + dialog */
@@ -145,8 +150,8 @@
 }
 
 .cal-modal {
-  background: #1e1c18;
-  color: var(--coc-cream);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
   border-radius: 10px;
   padding: 1.5rem;
   max-width: 540px;
@@ -155,7 +160,7 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(201, 162, 39, 0.2);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .cal-modal-close {
@@ -165,29 +170,29 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #b0a898;
+  color: var(--color-text-muted);
   cursor: pointer;
   line-height: 1;
 }
 
 .cal-modal-close:hover {
-  color: var(--coc-gold);
+  color: var(--color-accent);
 }
 
 .cal-modal h3 {
   font-size: 1.15rem;
   margin-bottom: 1rem;
-  color: var(--coc-cream);
+  color: var(--color-text);
 }
 
 .cal-modal-hr {
   border: none;
-  border-top: 1px solid rgba(201, 162, 39, 0.2);
+  border-top: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
   margin: 0.75rem 0;
 }
 
 .cal-no-events {
-  color: #b0a898;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
 }
@@ -203,9 +208,9 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
   font-size: 0.9rem;
-  color: var(--coc-cream);
+  color: var(--color-text);
 }
 
 .cal-event-item:last-child {
@@ -213,7 +218,7 @@
 }
 
 .cal-event-item strong {
-  color: #fff;
+  color: var(--color-text);
 }
 
 .cal-event-dot {
@@ -224,7 +229,7 @@
 }
 
 .cal-event-meta {
-  color: #b0a898;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   display: flex;
   align-items: center;
@@ -233,7 +238,7 @@
 
 .cal-event-client {
   margin-left: auto;
-  color: #b0a898;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
@@ -247,18 +252,18 @@
 }
 
 .cal-status--confirmed {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
 }
 
 .cal-status--pending {
-  background: #fff3e0;
-  color: #e65100;
+  background: color-mix(in srgb, var(--color-error) 15%, transparent);
+  color: var(--color-error);
 }
 
 .cal-status--completed {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  color: var(--color-success);
 }
 
 /* Standalone + Add Booking button in header */
@@ -282,25 +287,25 @@
   min-width: 60px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--coc-cream);
+  color: var(--color-text-muted);
 }
 
 .cal-field-row input,
 .cal-field-row select {
   flex: 1;
   padding: 0.35rem 0.5rem;
-  border: 1px solid #4a4438;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.85rem;
-  background: #2a2620;
-  color: var(--coc-cream);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .cal-field-row input:focus,
 .cal-field-row select:focus {
   outline: none;
-  border-color: var(--coc-gold);
-  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .cal-field-row--times {
@@ -327,66 +332,66 @@
 }
 /* Modal selects — option backgrounds for dark surface */
 .cal-modal select option {
-  background: #2a2620;
-  color: var(--coc-cream);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 /* "Edit" button inside modal event list — light on dark */
 .cal-modal .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--coc-cream);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+  color: var(--color-text);
+  border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
 }
 
 .cal-modal .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: color-mix(in srgb, var(--color-text) 18%, transparent);
 }
 /* Base inline field-error class (shared pattern from ClientForm.css) */
 .field-error {
-  color: #d32f2f;
+  color: var(--color-error);
   font-size: 0.8rem;
   margin-top: 0.25rem;
   margin-bottom: 0;
 }
 
 .field-error-border {
-  border-color: #d32f2f !important;
+  border-color: var(--color-error) !important;
 }
 
 /* Modal general error banner (dark bg) */
 .cal-form-general-error {
-  background: rgba(198, 40, 40, 0.2);
-  color: #ef9a9a;
+  background: color-mix(in srgb, var(--color-error) 18%, transparent);
+  color: var(--color-error);
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   margin-bottom: 0.75rem;
   font-size: 0.85rem;
   font-weight: 500;
-  border: 1px solid rgba(198, 40, 40, 0.3);
+  border: 1px solid color-mix(in srgb, var(--color-error) 25%, transparent);
 }
 
 /* Field error text for dark modal background */
 .cal-field-error.field-error {
   margin: -0.3rem 0 0.5rem 66px;
   font-size: 0.78rem;
-  color: #ef9a9a;
+  color: var(--color-error);
 }
 
 /* Override field-error-border for dark inputs so the red border is visible */
 .cal-field-row .field-error-border {
-  border-color: #ef5350 !important;
+  border-color: var(--color-error) !important;
 }
 .cal-staff-section {
   margin-top: 1rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(201, 162, 39, 0.2);
+  border-top: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .cal-staff-label {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--coc-cream);
+  color: var(--color-text-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -396,19 +401,19 @@
   gap: 0.4rem;
   padding: 0.3rem 0;
   font-size: 0.85rem;
-  color: var(--coc-cream);
+  color: var(--color-text);
   cursor: pointer;
 }
 
 .cal-staff-item input[type="checkbox"] {
-  accent-color: var(--coc-gold);
+  accent-color: var(--color-accent);
   width: 16px;
   height: 16px;
   flex: none;
 }
 
 .cal-staff-pos {
-  color: #b0a898;
+  color: var(--color-text-muted);
   font-size: 0.78rem;
   margin-left: 0.2rem;
 }

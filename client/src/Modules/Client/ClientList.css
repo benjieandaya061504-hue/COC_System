@@ -1,5 +1,5 @@
 .client-list-page {
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
@@ -13,7 +13,7 @@
 }
 
 .client-list-header h2 {
-  color: #333;
+  color: var(--color-text);
 }
 
 .client-table {
@@ -25,36 +25,36 @@
 .client-table td {
   text-align: left;
   padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border);
   font-size: 0.9rem;
 }
 
 .client-table th {
   font-size: 0.78rem;
   text-transform: uppercase;
-  color: #888;
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .client-table tbody tr:hover {
-  background: #fafafa;
+  background: var(--color-surface);
 }
 
 .client-empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 2rem !important;
 }
 
 .client-error {
-  color: #d32f2f;
+  color: var(--color-error);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
 }
 
 .client-name-link {
   font-weight: 600;
-  color: #1a73e8;
+  color: var(--color-accent);
 }
 
 .client-name-link:hover {
@@ -74,7 +74,7 @@
 .cat-chip {
   display: inline-block;
   font-size: 0.75rem;
-  color: #fff;
+  color: var(--color-text);
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 3px;
@@ -90,16 +90,27 @@
 }
 
 .status--confirmed {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
 }
 
 .status--pending {
-  background: #fff3e0;
-  color: #e65100;
+  background: color-mix(in srgb, var(--color-error) 15%, transparent);
+  color: var(--color-error);
 }
 
 .status--completed {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  color: var(--color-success);
+}
+.completed-indicator {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+.completed-indicator--yes {
+  background: var(--color-border);
+  color: var(--color-text-muted);
 }

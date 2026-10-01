@@ -132,6 +132,20 @@ export default function ClientDetail() {
                 <td className="detail-label">Status</td>
                 <td><span className={`status-badge status--${client.status}`}>{client.status}</span></td>
               </tr>
+              <tr>
+                <td className="detail-label">Event Completed</td>
+                <td>
+                  {client.completed_at ? (
+                    <span className="completed-indicator completed-indicator--yes">
+                      Completed on {client.completed_at.slice(0, 10)}
+                    </span>
+                  ) : (
+                    <span className="completed-indicator completed-indicator--no">
+                      Not yet completed
+                    </span>
+                  )}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

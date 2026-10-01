@@ -57,6 +57,7 @@ async function listEvents(req, res, next) {
               ce.venue,
               ce.contact_number,
               ce.status,
+              ce.completed_at,
               ce.total_amount,
               ce.notes,
               ce.is_active
@@ -80,6 +81,7 @@ async function listEvents(req, res, next) {
         venue: r.venue,
         contactNumber: r.contact_number,
         status: r.status,
+        completedAt: r.completed_at,
         totalAmount: Number(r.total_amount),
         notes: r.notes,
         isActive: Boolean(r.is_active),

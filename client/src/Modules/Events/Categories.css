@@ -1,5 +1,5 @@
 .categories-page {
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
@@ -7,7 +7,7 @@
 
 .categories-page h2 {
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .cat-add-form {
@@ -21,21 +21,21 @@
   flex: 1;
   max-width: 280px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.9rem;
   outline: none;
 }
 
 .cat-add-form input[type="text"]:focus {
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 .cat-add-form input[type="color"] {
   width: 36px;
   height: 36px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 2px;
   cursor: pointer;
@@ -50,19 +50,19 @@
 .cat-table td {
   text-align: left;
   padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border);
   font-size: 0.9rem;
 }
 
 .cat-table th {
   font-size: 0.78rem;
   text-transform: uppercase;
-  color: #888;
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .cat-table tbody tr:hover {
-  background: #fafafa;
+  background: var(--color-surface);
 }
 
 .cat-color-swatch {
@@ -82,7 +82,7 @@
 
 .cat-edit-inline input[type="text"] {
   padding: 0.35rem 0.6rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.85rem;
   width: 160px;
@@ -91,7 +91,7 @@
 .cat-edit-inline input[type="color"] {
   width: 30px;
   height: 30px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 1px;
 }
@@ -105,7 +105,7 @@
 .client-search-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.9rem;
   outline: none;
@@ -115,8 +115,8 @@
 }
 
 .client-search-input:focus {
-  border-color: var(--coc-gold);
-  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
 }
 /* Shared button styles */
 .btn {
@@ -130,30 +130,31 @@
 }
 
 .btn-primary {
-  background: var(--coc-gold);
-  color: #fff;
+  background: var(--color-accent);
+  color: var(--color-text);
 }
 
 .btn-primary:hover {
-  background: #b08a1f;
+  background: var(--color-accent-hover);
 }
 
 .btn-secondary {
-  background: #f0f2f5;
-  color: #555;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
 }
 
 .btn-secondary:hover {
-  background: #e0e2e5;
+  background: var(--color-bg-elevated);
 }
 
 .btn-danger {
-  background: #f44336;
-  color: #fff;
+  background: var(--color-error);
+  color: var(--color-text);
 }
 
 .btn-danger:hover {
-  background: #d32f2f;
+  background: var(--color-error);
+  filter: brightness(1.15);
 }
 
 .btn-sm {

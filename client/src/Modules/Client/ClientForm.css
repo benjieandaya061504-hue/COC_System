@@ -1,18 +1,18 @@
 .client-form-page {
-  background: #fff;
+  background: var(--color-bg-elevated);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
 
 .client-form-page h2 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .form-success {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  color: var(--color-success);
   padding: 0.7rem 1rem;
   border-radius: 6px;
   margin-bottom: 1rem;
@@ -21,8 +21,8 @@
 }
 
 .form-general-error {
-  background: #fce4ec;
-  color: #c62828;
+  background: color-mix(in srgb, var(--color-error) 15%, transparent);
+  color: var(--color-error);
   padding: 0.7rem 1rem;
   border-radius: 6px;
   margin-bottom: 1rem;
@@ -31,18 +31,18 @@
 }
 
 .field-error {
-  color: #d32f2f;
+  color: var(--color-error);
   font-size: 0.8rem;
   margin-top: 0.25rem;
   margin-bottom: 0;
 }
 
 .field-error-border {
-  border-color: #d32f2f !important;
+  border-color: var(--color-error) !important;
 }
 
 .field-error-border:focus {
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 15%, transparent) !important;
 }
 
 .client-form .form-row {
@@ -62,7 +62,7 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-text-muted);
   margin-bottom: 0.3rem;
 }
 
@@ -71,7 +71,7 @@
 .client-form textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 0.9rem;
   outline: none;
@@ -81,8 +81,8 @@
 .client-form input:focus,
 .client-form select:focus,
 .client-form textarea:focus {
-  border-color: #1a73e8;
-  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 .client-form textarea {
@@ -98,6 +98,6 @@
 
 .client-empty {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 2rem !important;
 }

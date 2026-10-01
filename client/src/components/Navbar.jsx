@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../Modules/Login/authContext.jsx'
 import './Navbar.css'
@@ -5,6 +6,18 @@ import './Navbar.css'
 export default function Navbar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('coc-theme') || 'dark'
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('coc-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
 
   const handleLogout = () => {
     logout()
@@ -26,6 +39,9 @@ export default function Navbar() {
         <li><NavLink to="/staff/assign">Assign Staff</NavLink></li>
       </ul>
       <div className="navbar-right">
+        <button className="btn-toggle-theme" onClick={toggleTheme} title="Toggle theme">
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
         <span className="navbar-user">{user || 'User'}</span>
         <button className="btn-logout" onClick={handleLogout}>Logout</button>
       </div>

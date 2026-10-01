@@ -35,6 +35,7 @@ export default function Calendar() {
   const [generalFormError, setGeneralFormError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [refreshError, setRefreshError] = useState('')
+  const [completionError, setCompletionError] = useState('')
 
   // Helper: update a field + clear its inline error
   const setField = (setter, fieldKey) => (value) => {
@@ -122,6 +123,26 @@ export default function Calendar() {
   useEffect(() => {
     fetchMonthEvents()
   }, [year, month])
+
+  // -- Mark/unmark event completion --
+  const handleToggleDone = async (ev, action) => {
+    setCompletionError('')
+    try {
+      if (action === 'complete') {
+        await axiosClient.patch(`/clients/${ev.id}/complete`)
+      } else {
+        await axiosClient.patch(`/clients/${ev.id}/uncomplete`)
+      }
+      await fetchMonthEvents()
+    } catch (err) {
+      console.error('Failed to toggle completion:', err)
+      setCompletionError(
+        action === 'complete'
+          ? 'Failed to mark event as done.'
+          : 'Failed to unmark event.'
+      )
+    }
+  }
 
   // -- Fetch staff list once on mount --
   useEffect(() => {
@@ -388,6 +409,7 @@ export default function Calendar() {
         </button>
       </div>
       {refreshError && <div className='cal-refresh-error' style={{padding:'8px',background:'#ffe0e0',borderRadius:'4px',marginBottom:'8px'}}><span>{refreshError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setRefreshError('')}>{'\u00D7'}</span></div>}
+      {completionError && <div style={{padding:'8px',background:'#ffe0e0',borderRadius:'4px',marginBottom:'8px'}}><span>{completionError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setCompletionError('')}>{'\u00D7'}</span></div>}
 
 
 
@@ -411,7 +433,7 @@ export default function Calendar() {
             {cell.events.slice(0, 2).map((ev) => (
               <div
                 key={ev.id}
-                className="cal-event-chip"
+                className={`cal-event-chip${ev.completedAt ? ' cal-event-chip--completed' : ''}`}
                 style={{ background: catMap[ev.categoryId]?.color || '#999' }}
                 title={ev.title}
               >
@@ -465,6 +487,14 @@ export default function Calendar() {
                         </span>
                         <span className="cal-event-client">{ev.contactNumber}</span>
                         <button className="btn btn-sm btn-secondary" onClick={() => startEdit(ev)}>Edit</button>
+                        {ev.completedAt ? (
+                          <>
+                            <span className="cal-done-badge" style={{marginLeft:'8px',color:'#2e7d32',fontWeight:'bold'}}>✅ Done <small style={{fontWeight:'normal',fontSize:'0.8em'}}>({ev.completedAt.slice(0,10)})</small></span>
+                            <button className="btn btn-sm btn-secondary" style={{marginLeft:'6px'}} onClick={() => handleToggleDone(ev, 'uncomplete')}>Undo</button>
+                          </>
+                        ) : (
+                          <button className="btn btn-sm btn-success" style={{marginLeft:'6px'}} onClick={() => handleToggleDone(ev, 'complete')}>Mark as Done</button>
+                        )}
                       </li>
                     ))}
                   </ul>

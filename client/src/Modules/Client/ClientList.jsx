@@ -131,6 +131,11 @@ export default function ClientList() {
                     <span className={`status-badge status--${c.status}`}>
                       {c.status}
                     </span>
+                    {c.completed_at && (
+                      <span className="completed-indicator completed-indicator--yes" style={{marginLeft:'6px'}}>
+                        Done
+                      </span>
+                    )}
                   </td>
                   <td className="actions-cell">
                     <Link to={`/clients/${c.id}`} className="btn btn-sm btn-secondary">
