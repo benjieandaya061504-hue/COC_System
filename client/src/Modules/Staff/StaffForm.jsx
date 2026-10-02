@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import axiosClient from '../../api/axiosClient.js'
 import './StaffForm.css'
@@ -17,7 +17,7 @@ export default function StaffForm() {
 
   const [form, setForm] = useState({ name: '', position: '', contact_number: '' })
 
-  // Fetch all staff on mount � used to pre-fill edit form
+  // Fetch all staff on mount — used to pre-fill edit form
   useEffect(() => {
     if (!isEdit) return
     let cancelled = false
@@ -187,3 +187,4 @@ export default function StaffForm() {
     </div>
   )
 }
+

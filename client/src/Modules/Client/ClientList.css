@@ -30,7 +30,7 @@
 }
 
 .client-table th {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   color: var(--color-text-muted);
   font-weight: 600;

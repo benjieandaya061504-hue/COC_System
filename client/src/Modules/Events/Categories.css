@@ -55,7 +55,7 @@
 }
 
 .cat-table th {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   color: var(--color-text-muted);
   font-weight: 600;
@@ -122,11 +122,19 @@
 .btn {
   border: none;
   border-radius: 6px;
-  padding: 0.45rem 0.85rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.15s ease;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn-primary {
@@ -158,6 +166,6 @@
 }
 
 .btn-sm {
-  font-size: 0.78rem;
-  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.7rem;
 }

@@ -89,7 +89,7 @@ export default function ClientList() {
             <th>Venue</th>
             <th>Category</th>
             <th>Balance</th>
-            <th>Status</th>
+            <th>Payment Status</th>
             <th>Actions</th>
           </tr>
         </thead>

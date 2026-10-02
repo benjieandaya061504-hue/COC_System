@@ -221,6 +221,7 @@ export default function Calendar() {
 
   const startEdit = (ev) => {
     setEditingEvent(ev)
+    setModalDate(null)
     setFormErrors({})
     setGeneralFormError('')
     setIsSubmitting(false)
@@ -408,8 +409,8 @@ export default function Calendar() {
           + Add Booking
         </button>
       </div>
-      {refreshError && <div className='cal-refresh-error' style={{padding:'8px',background:'#ffe0e0',borderRadius:'4px',marginBottom:'8px'}}><span>{refreshError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setRefreshError('')}>{'\u00D7'}</span></div>}
-      {completionError && <div style={{padding:'8px',background:'#ffe0e0',borderRadius:'4px',marginBottom:'8px'}}><span>{completionError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setCompletionError('')}>{'\u00D7'}</span></div>}
+      {refreshError && <div className='cal-refresh-error'><span>{refreshError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setRefreshError('')}>{'\u00D7'}</span></div>}
+      {completionError && <div className="cal-completion-error"><span>{completionError}</span><span style={{cursor:'pointer',marginLeft:'12px',fontWeight:'bold'}} onClick={() => setCompletionError('')}>{'\u00D7'}</span></div>}
 
 
 

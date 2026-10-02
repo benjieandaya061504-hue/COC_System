@@ -129,7 +129,7 @@ export default function ClientDetail() {
                 ) : '-'}</td>
               </tr>
               <tr>
-                <td className="detail-label">Status</td>
+                <td className="detail-label">Payment Status</td>
                 <td><span className={`status-badge status--${client.status}`}>{client.status}</span></td>
               </tr>
               <tr>

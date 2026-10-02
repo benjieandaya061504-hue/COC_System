@@ -27,7 +27,10 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <NavLink to="/">COC System</NavLink>
+        <NavLink to="/">
+          <img src="/coc_logo.jpg" alt="Call of Camera logo" className="navbar-logo" />
+          Call of Camera
+        </NavLink>
       </div>
       <ul className="navbar-links">
         <li><NavLink to="/calendar">Calendar</NavLink></li>

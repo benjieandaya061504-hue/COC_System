@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import axiosClient from '../../api/axiosClient.js'
 import './AssignStaff.css'
 
@@ -140,7 +140,7 @@ export default function AssignStaff() {
         >
           {clients.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.client_name} � {c.event_date || ''}
+              {c.client_name} — {c.event_date || ''}
             </option>
           ))}
         </select>
@@ -177,3 +177,4 @@ export default function AssignStaff() {
     </div>
   )
 }
+
